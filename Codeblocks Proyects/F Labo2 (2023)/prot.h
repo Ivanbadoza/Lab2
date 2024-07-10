@@ -38,5 +38,13 @@ typedef struct {
     nodoListaJugador * listaJugadores;
 } arregloEquipo;
 
-
+nodoListaJugador* inicializarLista();
+nodoListaJugador* crearNodo(stJugador j) ;
+nodoListaJugador* insertarNodoRecursivo(nodoListaJugador* lista, stJugador j);
+int agregarEquipo(arregloEquipo* equipos, int* cantidad, char* nombreEquipo);
+int buscarPosicionEquipo(arregloEquipo* equipos, int cantidad, char* nombreEquipo);
+stJugador cargarJugadorDesdeTeclado();
+stEquipo cargarEquipoDesdeTeclado();
+void mostrarEquiposYJugadores(arregloEquipo* equipos, int cantidad);
+void generarArchivoJugadores(const char* nombreArchivo, arregloEquipo* equipos, int cantidadEquipos);
 #endif // PROT_H_INCLUDED

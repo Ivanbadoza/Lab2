@@ -50,27 +50,27 @@ void AgregarALaFila(nodoCarta **inicio, nodoCarta **fin, stCarta carta) {
     }
 }
 
-// Función para extraer la primera carta de la fila (lista doblemente enlazada)
+/// Función para extraer la primera carta de la fila (lista doblemente enlazada)
 stCarta extraerDeLaFila(nodoCarta **inicio, nodoCarta **fin) {
     stCarta cartaExtraida;
-    nodoCarta *temp;
+    nodoCarta *seg;
 
     // Inicializar cartaExtraida con un valor de error por defecto
     cartaExtraida.tipoCarta = -1;
 
     // Verificar si la fila está vacía
     if (*inicio != NULL) {
-        temp = *inicio;
-        cartaExtraida = temp->dato;
+        seg = *inicio;
+        cartaExtraida = seg->dato;
 
-        *inicio = temp->siguiente;
+        *inicio = seg->siguiente;
         if (*inicio == NULL) {
             *fin = NULL;
         } else {
             (*inicio)->anterior = NULL;
         }
 
-        free(temp);
+        free(seg);
     } else {
         printf("La fila está vacía. No se puede extraer ninguna carta.\n");
     }
@@ -78,21 +78,21 @@ stCarta extraerDeLaFila(nodoCarta **inicio, nodoCarta **fin) {
     return cartaExtraida;
 }
 
-// Función para pasar cartas de un tipo específico a un arreglo
+/// Función para pasar cartas de un tipo específico a un arreglo
 int pasarCartasAArreglo(nodoCarta **inicio, nodoCarta **fin, int tipo, stCarta arreglo[MAX_CARTAS]) {
     int contador = 0;
-    nodoCarta *actual = *inicio;
+    nodoCarta *seg = *inicio;
     nodoCarta *siguiente = NULL;
     nodoCarta *anterior = NULL;
 
     // Recorrer la lista y pasar las cartas al arreglo
-    while (actual != NULL && contador < MAX_CARTAS) {
-        siguiente = actual->siguiente;
-        anterior = actual->anterior; // Guardar el nodo anterior antes de liberar memoria
+    while (seg != NULL && contador < MAX_CARTAS) {
+        siguiente = seg->siguiente;
+        anterior = seg->anterior; // Guardar el nodo anterior antes de liberar memoria
 
         // Verificar si la carta es del tipo buscado
-        if (actual->dato.tipoCarta == tipo) {
-            arreglo[contador] = actual->dato;
+        if (seg->dato.tipoCarta == tipo) {
+            arreglo[contador] = seg->dato;
             contador++;
 
             // Si actual es el primer nodo, ajustar *inicio
@@ -114,11 +114,11 @@ int pasarCartasAArreglo(nodoCarta **inicio, nodoCarta **fin, int tipo, stCarta a
             }
 
             // Liberar memoria del nodo actual
-            free(actual);
+            free(seg);
         }
 
         // Avanzar al siguiente nodo
-        actual = siguiente;
+        seg = siguiente;
     }
 
     return contador;
@@ -126,7 +126,7 @@ int pasarCartasAArreglo(nodoCarta **inicio, nodoCarta **fin, int tipo, stCarta a
 
 
 
-// Función para mostrar el arreglo de cartas
+/// Función para mostrar el arreglo de cartas
 void mostrarArreglo(stCarta arreglo[MAX_CARTAS], int cantidad) {
     printf("Cartas en el arreglo:\n");
     for (int i = 0; i < cantidad; i++) {
@@ -135,7 +135,7 @@ void mostrarArreglo(stCarta arreglo[MAX_CARTAS], int cantidad) {
 }
 
 
-// Función para mostrar todos los elementos de la fila
+/// Función para mostrar todos los elementos de la fila
 void MostrarFila(nodoCarta *inicio) {
     if (inicio == NULL) {
         printf("La fila está vacía.\n");
@@ -143,33 +143,33 @@ void MostrarFila(nodoCarta *inicio) {
     }
 
     printf("Elementos de la fila:\n");
-    nodoCarta *actual = inicio;
-    while (actual != NULL) {
-        printf("Destino: %s, Tipo de carta: %d\n", actual->dato.destino, actual->dato.tipoCarta);
-        actual = actual->siguiente;
+    nodoCarta *seg = inicio;
+    while (seg != NULL) {
+        printf("Destino: %s, Tipo de carta: %d\n", seg->dato.destino, seg->dato.tipoCarta);
+        seg = seg->siguiente;
     }
 }
 
 // Función para liberar todos los nodos de la fila al final del programa
 void LiberarFila(nodoCarta **inicio) {
-    nodoCarta *actual = *inicio;
-    while (actual != NULL) {
-        nodoCarta *temp = actual;
-        actual = actual->siguiente;
+    nodoCarta *seg = *inicio;
+    while (seg != NULL) {
+        nodoCarta *temp = seg;
+        seg = seg->siguiente;
         free(temp);
     }
     *inicio = NULL;
 }
 // Función para vaciar una lista doblemente enlazada
 void vaciarLista(nodoCarta **inicio, nodoCarta **fin) {
-    nodoCarta *actual = *inicio;
+    nodoCarta *seg = *inicio;
     nodoCarta *siguiente = NULL;
 
     // Recorrer la lista y liberar memoria de cada nodo
-    while (actual != NULL) {
-        siguiente = actual->siguiente;
-        free(actual); // Liberar nodo actual
-        actual = siguiente; // Avanzar al siguiente nodo
+    while (seg != NULL) {
+        siguiente = seg->siguiente;
+        free(seg); // Liberar nodo actual
+        seg = siguiente; // Avanzar al siguiente nodo
     }
 
     // Establecer inicio y fin a NULL (lista vacía)

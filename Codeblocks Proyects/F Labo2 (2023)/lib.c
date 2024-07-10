@@ -3,52 +3,64 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-nodoListaJugador* inicializarLista() {
+///Inic Lista
+nodoListaJugador* inicializarLista()
+{
     return NULL;
 }
-nodoListaJugador* crearNodo(stJugador j) {
+
+///Crearr Nodo
+nodoListaJugador* crearNodo(stJugador j)
+{
     nodoListaJugador* nuevo = (nodoListaJugador*) malloc(sizeof(nodoListaJugador));
-    if (!nuevo) {
-        printf("Error al asignar memoria.\n");
-        exit(1);
-    }
     nuevo->j = j;
     nuevo->sig = NULL;
     return nuevo;
 }
 
-nodoListaJugador* insertarNodoRecursivo(nodoListaJugador* lista, stJugador j) {
-    if (lista == NULL) {
-        return crearNodo(j);
-    } else {
+///Insertar Nodo de Forma Recursiva
+nodoListaJugador* insertarNodoRecursivo(nodoListaJugador* lista, stJugador j)
+{
+    if (lista == NULL)
+    {
+        lista= crearNodo(j);
+    }
+    else
+    {
         lista->sig = insertarNodoRecursivo(lista->sig, j);
         return lista;
     }
 }
 
-
-nodoListaJugador* agregarJugador(nodoListaJugador * lista, stJugador j) {
-    nodoListaJugador * nuevo = (nodoListaJugador *) malloc(sizeof(nodoListaJugador));
-    if (!nuevo) {
-        printf("Error al asignar memoria.\n");
-        exit(1);
-    }
-    nuevo->j = j;
-    nuevo->sig = lista;
-    return nuevo;
+///Creo un equipo nuevo
+int agregarEquipo(arregloEquipo* equipos, int* cantidad, char* nombreEquipo)
+{
+    int indice = *cantidad;
+    equipos[indice].e.idEquipo = indice + 1; ///se genera el id automatico
+    strcpy(equipos[indice].e.nombreEquipo, nombreEquipo);
+    equipos[indice].e.puntosGanados = 0;
+    equipos[indice].listaJugadores = inicializarLista();
+    (*cantidad)++;
+    return indice;
 }
 
-int buscarEquipo(arregloEquipo* equipos, int cantidad, char* nombreEquipo) {
-    for (int i = 0; i < cantidad; i++) {
-        if (strcmp(equipos[i].e.nombreEquipo, nombreEquipo) == 0) {
-            return i;
+///Busco posicion del equipo , si no existe devuelvo -1
+int buscarPosicionEquipo(arregloEquipo* equipos, int cantidad, char* nombreEquipo)
+{
+
+    int rta=-1;
+    for (int i = 0; i < cantidad; i++)
+    {
+        if (strcmp(equipos[i].e.nombreEquipo, nombreEquipo) == 0)
+        {
+            rta=i;
         }
     }
-    return -1;
+    return rta;
 }
-
-int agregarEquipo(arregloEquipo* equipos, int* cantidad, char* nombreEquipo) {
+///Creo nodo arreglo equipo
+int crearNuevoEquipo(arregloEquipo* equipos, int* cantidad, char* nombreEquipo)
+{
     int indice = *cantidad;
     equipos[indice].e.idEquipo = indice + 1;
     strcpy(equipos[indice].e.nombreEquipo, nombreEquipo);
@@ -57,99 +69,68 @@ int agregarEquipo(arregloEquipo* equipos, int* cantidad, char* nombreEquipo) {
     (*cantidad)++;
     return indice;
 }
-int buscarPosicionEquipo(arregloEquipo* equipos, int cantidad, char* nombreEquipo) {
-    for (int i = 0; i < cantidad; i++) {
-        if (strcmp(equipos[i].e.nombreEquipo, nombreEquipo) == 0) {
-            return i;
-        }
-    }
-    return -1;
-}
+/// Doy alta a un nuevo jugador , si no existe equipo , lo agrego.
 
-int crearNuevoEquipo(arregloEquipo* equipos, int* cantidad, char* nombreEquipo) {
-    int indice = *cantidad;
-    equipos[indice].e.idEquipo = indice + 1;
-    strcpy(equipos[indice].e.nombreEquipo, nombreEquipo);
-    equipos[indice].e.puntosGanados = 0;
-    equipos[indice].listaJugadores = inicializarLista();
-    (*cantidad)++;
-    return indice;
-}
-
-void darAltaNuevoJugador(arregloEquipo* equipos, int* cantidad, stJugador jugador, char* nombreEquipo) {
+void darAltaNuevoJugador(arregloEquipo* equipos, int* cantidad, stJugador jugador, char* nombreEquipo)
+{
     int indiceEquipo = buscarPosicionEquipo(equipos, *cantidad, nombreEquipo);
-    if (indiceEquipo == -1) {
+    if (indiceEquipo == -1)
+    {
         // Si el equipo no se encuentra, se crea un nuevo equipo
         indiceEquipo = crearNuevoEquipo(equipos, cantidad, nombreEquipo);
     }
     // Se agrega el nuevo jugador al equipo encontrado o creado
     equipos[indiceEquipo].listaJugadores = insertarNodoRecursivo(equipos[indiceEquipo].listaJugadores, jugador);
 }
-
-void leerArchivoYAgregarJugadores(arregloEquipo* equipos, int* cantidad, const char* nombreArchivo) {
+/// Leo un archivo de jugadores
+void leerArchivoYAgregarJugadores(arregloEquipo* equipos, int* cantidad, const char* nombreArchivo)
+{
     FILE* archivo = fopen(nombreArchivo, "rb");
-    if (!archivo) {
-        printf("Error al abrir el archivo %s.\n", nombreArchivo);
-        return;
+    if (!archivo)
+    {
+        stRegistroJugador registro;
+        while (fread(&registro, sizeof(stRegistroJugador), 1, archivo) == 1)
+        {
+            printf("Leyendo registro: %s %s, Equipo: %s\n", registro.nombreJugador, registro.apellidoJugador, registro.nombreEquipo);
+
+            stJugador jugador;
+            jugador.nroJugador = registro.nroJugador;
+            strcpy(jugador.nombreJugador, registro.nombreJugador);
+            strcpy(jugador.apellidoJugador, registro.apellidoJugador);
+            jugador.clase = registro.clase;
+            strcpy(jugador.puestoJugador, registro.puestoJugador);
+
+            darAltaNuevoJugador(equipos, cantidad, jugador, registro.nombreEquipo);
+        }
+
+        fclose(archivo);
+    }
+    else
+    {
+        printf("No se pudo abrir el archivo . ");
     }
 
-    stRegistroJugador registro;
-    while (fread(&registro, sizeof(stRegistroJugador), 1, archivo) == 1) {
-        printf("Leyendo registro: %s %s, Equipo: %s\n", registro.nombreJugador, registro.apellidoJugador, registro.nombreEquipo);
-
-        stJugador jugador;
-        jugador.nroJugador = registro.nroJugador;
-        strcpy(jugador.nombreJugador, registro.nombreJugador);
-        strcpy(jugador.apellidoJugador, registro.apellidoJugador);
-        jugador.clase = registro.clase;
-        strcpy(jugador.puestoJugador, registro.puestoJugador);
-
-        darAltaNuevoJugador(equipos, cantidad, jugador, registro.nombreEquipo);
-    }
-
-    fclose(archivo);
 }
-
-void mostrarEquiposYJugadores(arregloEquipo* equipos, int cantidad) {
-    for (int i = 0; i < cantidad; i++) {
+///Recorro el arreglo y muestro equipos con sus jugadores
+void mostrarEquiposYJugadores(arregloEquipo* equipos, int cantidad)
+{
+    for (int i = 0; i < cantidad; i++)
+    {
         printf("Equipo: %s\n", equipos[i].e.nombreEquipo);
         nodoListaJugador* lista = equipos[i].listaJugadores;
-        while (lista) {
+        while (lista)
+        {
             printf("\tJugador: %s %s\n", lista->j.nombreJugador, lista->j.apellidoJugador);
             lista = lista->sig;
         }
     }
 }
-void generarArchivoJugadores(const char* nombreArchivo) {
+///Guardo jugadores em archivo
+void generarArchivoJugadores(const char* nombreArchivo, arregloEquipo* equipos, int cantidadEquipos) {
     FILE* archivo = fopen(nombreArchivo, "wb");
     if (!archivo) {
-        printf("Error al abrir el archivo para escritura.\n");
+        printf("No se pudo generar el archivo %s.\n", nombreArchivo);
         return;
-    }
-
-    stRegistroJugador registros[] = {
-        {1, 10, "Lionel", "Messi", 1987, "Delantero", "Barcelona", 100},
-        {2, 7, "Cristiano", "Ronaldo", 1985, "Delantero", "Real Madrid", 90},
-        {3, 8, "Andres", "Iniesta", 1984, "Medio", "Barcelona", 80},
-        {4, 1, "Iker", "Casillas", 1981, "Arquero", "Real Madrid", 85},
-        {5, 3, "Gerard", "Pique", 1987, "Defensor", "Barcelona", 75},
-        {6, 4, "Sergio", "Ramos", 1986, "Defensor", "Real Madrid", 70}
-    };
-
-    size_t cantidadRegistros = sizeof(registros) / sizeof(stRegistroJugador);
-
-    arregloEquipo equipos[MAX_EQUIPOS];
-    int cantidadEquipos = 0;
-
-    for (size_t i = 0; i < cantidadRegistros; i++) {
-        stJugador jugador;
-        jugador.nroJugador = registros[i].nroJugador;
-        strcpy(jugador.nombreJugador, registros[i].nombreJugador);
-        strcpy(jugador.apellidoJugador, registros[i].apellidoJugador);
-        jugador.clase = registros[i].clase;
-        strcpy(jugador.puestoJugador, registros[i].puestoJugador);
-
-        darAltaNuevoJugador(equipos, &cantidadEquipos, jugador, registros[i].nombreEquipo);
     }
 
     for (int i = 0; i < cantidadEquipos; i++) {
@@ -169,21 +150,23 @@ void generarArchivoJugadores(const char* nombreArchivo) {
         }
     }
 
-    fclose(archivo);
     printf("Archivo %s generado con éxito.\n", nombreArchivo);
+    fclose(archivo);
 }
 
-
 // Función para cargar jugadores desde el archivo
-void cargarJugadoresDesdeArchivo(arregloEquipo* equipos, int* cantidadEquipos, const char* nombreArchivo) {
+void cargarJugadoresDesdeArchivo(arregloEquipo* equipos, int* cantidadEquipos, const char* nombreArchivo)
+{
     FILE* archivo = fopen(nombreArchivo, "rb");
-    if (!archivo) {
+    if (!archivo)
+    {
         printf("Error al abrir el archivo %s.\n", nombreArchivo);
         return;
     }
 
     stRegistroJugador registro;
-    while (fread(&registro, sizeof(stRegistroJugador), 1, archivo) == 1) {
+    while (fread(&registro, sizeof(stRegistroJugador), 1, archivo) == 1)
+    {
         stJugador jugador;
         jugador.nroJugador = registro.nroJugador;
         strcpy(jugador.nombreJugador, registro.nombreJugador);
@@ -198,19 +181,74 @@ void cargarJugadoresDesdeArchivo(arregloEquipo* equipos, int* cantidadEquipos, c
 }
 
 // Función para buscar el número de jugador por equipo, nombre y apellido
-int buscarNumeroJugador(arregloEquipo* equipos, int cantidadEquipos, char* nombreEquipo, char* nombreJugador, char* apellidoJugador) {
+int buscarNumeroJugador(arregloEquipo* equipos, int cantidadEquipos, char* nombreEquipo, char* nombreJugador, char* apellidoJugador)
+{
+    int rta=-1;
     int indiceEquipo = buscarPosicionEquipo(equipos, cantidadEquipos, nombreEquipo);
-    if (indiceEquipo == -1) {
-        return -1; // Equipo no encontrado
+    if (indiceEquipo == -1)
+    {
+        rta= -1; // Equipo no encontrado
     }
 
     nodoListaJugador* lista = equipos[indiceEquipo].listaJugadores;
-    while (lista) {
-        if (strcmp(lista->j.nombreJugador, nombreJugador) == 0 && strcmp(lista->j.apellidoJugador, apellidoJugador) == 0) {
+    while (lista)
+    {
+        if (strcmp(lista->j.nombreJugador, nombreJugador) == 0 && strcmp(lista->j.apellidoJugador, apellidoJugador) == 0)
+        {
             return lista->j.nroJugador; // Jugador encontrado
         }
         lista = lista->sig;
     }
 
-    return -1; // Jugador no encontrado en el equipo
+    return rta; // Jugador no encontrado en el equipo
+}
+
+stJugador cargarJugadorDesdeTeclado()
+{
+    stJugador jugador;
+
+    printf("Ingrese el número del jugador: ");
+    fflush(stdin);
+    scanf("%d",&jugador.nroJugador);
+    printf("Ingrese el nombre del jugador: ");
+    fflush(stdin);
+    gets(jugador.nombreJugador);
+    printf("Ingrese el apellido del jugador: ");
+    fflush(stdin);
+    gets(jugador.apellidoJugador);
+    printf("Ingrese el año de nacimiento del jugador: ");
+    fflush(stdin);
+    scanf("%d", &jugador.clase);
+    printf("Ingrese el puesto del jugador: ");
+    fflush(stdin);
+    gets(jugador.puestoJugador);
+
+    return jugador;
+}
+// Función para cargar un equipo desde el teclado
+stEquipo cargarEquipoDesdeTeclado()
+{
+    stEquipo equipo;
+
+    printf("Ingrese el nombre del equipo: ");
+    scanf("%s", equipo.nombreEquipo);
+    printf("Ingrese los puntos ganados por el equipo: ");
+    scanf("%d", &equipo.puntosGanados);
+    // ID del equipo será generado al agregarlo al arreglo
+
+    return equipo;
+}
+
+// Función para mostrar el menú
+void mostrarMenu()
+{
+    printf("\n--- Menu ---\n");
+    printf("1. Cargar jugadores desde archivo\n");
+    printf("2. Mostrar jugadores por equipo\n");
+    printf("3. Buscar numero de jugador\n");
+    printf("4. Cargar nuevo jugador\n");
+    printf("5. Cargar nuevo equipo\n");
+    printf("6. Guardar Archivo Equipos\n");
+    printf("7. Salir .\n");
+    printf("Seleccione una opcion: ");
 }
