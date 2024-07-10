@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1720324521 source:c:\users\ivanb\codeblocks proyects\laboratorio 2 - segundo parcial (1)\main.c
+	<stdio.h>
+	<stdlib.h>
+	"prot.h"
+
+1720324580 source:c:\users\ivanb\codeblocks proyects\laboratorio 2 - segundo parcial (1)\lib.c
+	"prot.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1720310841 c:\users\ivanb\codeblocks proyects\laboratorio 2 - segundo parcial (1)\prot.h
+

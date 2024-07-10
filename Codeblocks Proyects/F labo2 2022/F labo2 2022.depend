@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1720458405 source:c:\users\ivanb\codeblocks proyects\f labo2 2022\main.c
+	<stdio.h>
+	<stdlib.h>
+	"prot.h"
+	<string.h>
+
+1720458930 source:c:\users\ivanb\codeblocks proyects\f labo2 2022\lib.c
+	<stdio.h>
+	<stdlib.h>
+	"prot.h"
+	<string.h>
+
+1720459006 c:\users\ivanb\codeblocks proyects\f labo2 2022\prot.h
+

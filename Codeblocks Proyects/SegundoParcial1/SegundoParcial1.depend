@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1720521047 source:c:\users\ivanb\codeblocks proyects\segundoparcial1\main.c
+	<stdio.h>
+	<stdlib.h>
+	"SegundoParcial.h"
+
+1720520938 c:\users\ivanb\codeblocks proyects\segundoparcial1\segundoparcial.h
+
+1720524272 source:c:\users\ivanb\codeblocks proyects\segundoparcial1\segundoparcial.c
+	<string.h>
+	<stdio.h>
+	<stdlib.h>
+	"SegundoParcial.h"
+

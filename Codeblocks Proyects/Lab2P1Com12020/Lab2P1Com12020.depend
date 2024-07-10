@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1720563043 source:c:\users\ivanb\codeblocks proyects\lab2p1com12020\main.c
+	<stdio.h>
+	<stdlib.h>
+	"Lib.h"
+
+1720565990 source:c:\users\ivanb\codeblocks proyects\lab2p1com12020\lib.c
+	"Lib.h"
+	<stdio.h>
+	<stdlib.h>
+
+1720565766 c:\users\ivanb\codeblocks proyects\lab2p1com12020\lib.h
+
