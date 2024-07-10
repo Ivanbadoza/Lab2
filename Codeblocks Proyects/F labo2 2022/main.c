@@ -16,6 +16,8 @@ int main()
         printf("5. Buscar socios con deuda de cuotas\n");
         printf("6. Alta Manual de Socio\n");
         printf("7. Alta Manual de Deporte\n");
+        printf("8. Leer archivo socios\n");
+        printf("9. Leer archivo deportes\n");
         printf("0. Salir\n");
         printf("Seleccione una opcion: ");
         scanf("%d", &opcion);
@@ -28,10 +30,10 @@ int main()
                 listarSociosDeporteConMasSocios(listaDeportes);
                 break;
             case 3:
-                escribirDatosSocios("socios.bin", listaDeportes);
+                escribirDatosSocios("socios.dat", listaDeportes);
                 break;
             case 4:
-                escribirDatosDeportes("deportes.bin", listaDeportes);
+                escribirDatosDeportes("deportes.dat", listaDeportes);
                 break;
             case 5: {
                 char nombreDeporte[50];
@@ -58,6 +60,12 @@ int main()
             case 7:
                 altaManualDeporte(&listaDeportes);
                 break;
+                  case 8:
+                listaDeportes=leerDatosSocios("socios.dat",listaDeportes);
+                break;
+                  case 9:
+                listaDeportes=leerDatosDeportes("deportes.dat");
+                break;
             case 0:
                 printf("Saliendo...\n");
                 break;
@@ -70,6 +78,5 @@ int main()
     // Liberar memoria de la lista de deportes al salir del programa
     liberarListaPrincipal(listaDeportes);
 
-    return 0;
     return 0;
 }

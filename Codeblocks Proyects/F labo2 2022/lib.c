@@ -3,75 +3,94 @@
 #include "prot.h"
 #include <string.h>
 
-nodo* inicializarLista() {
+nodo* inicializarLista()
+{
     return NULL;
 }
 // Función para inicializar la lista secundaria
-nodo2* inicializarListaSecundaria() {
+nodo2* inicializarListaSecundaria()
+{
     return NULL;
 }
+///Creo nuevo nodo
+nodo* CrearNuevoNodo (stDeporte datos)
+{
+    nodo* nuevoNodo=(nodo*)malloc(sizeof(nodo));
+    nuevoNodo->datos=datos;
+    nuevoNodo->sig=NULL;
+    nuevoNodo->listaDeLista=inicializarListaSecundaria;
 
-
+    return nuevoNodo;
+}
 // Función para agregar al final de la lista principal y retornar la lista principal actualizada
-// Función para agregar un deporte a la lista principal
-nodo* agregarDeporte(nodo* cabeza, stDeporte datos) {
-    nodo* nuevoNodo = (nodo*)malloc(sizeof(nodo));
-    if (nuevoNodo == NULL) {
-        fprintf(stderr, "Error: no se pudo asignar memoria para el nuevo nodo\n");
-        return cabeza;
+nodo* agregarDeporte(nodo* cabeza, stDeporte datos)
+{
+    nodo* nuevoNodo = CrearNuevoNodo(datos);
+    if (cabeza == NULL)
+    {
+        cabeza= nuevoNodo;
     }
-    nuevoNodo->datos = datos;
-    nuevoNodo->sig = NULL;
-    nuevoNodo->listaDeLista = inicializarListaSecundaria();
-
-    if (cabeza == NULL) {
-        return nuevoNodo;
-    } else {
+    else
+    {
         nodo* actual = cabeza;
-        while (actual->sig != NULL) {
+        while (actual->sig != NULL)
+        {
             actual = actual->sig;
         }
         actual->sig = nuevoNodo;
     }
     return cabeza;
 }
-// Función para agregar un socio ordenado por nombre a la lista secundaria
-nodo2* agregarSocioOrdenado(nodo2* cabeza, stClub datos) {
-    nodo2* nuevoNodo = (nodo2*)malloc(sizeof(nodo2));
-    if (nuevoNodo == NULL) {
-        fprintf(stderr, "Error: no se pudo asignar memoria para el nuevo nodo\n");
-        return cabeza;
-    }
-    nuevoNodo->datos = datos;
-    nuevoNodo->sig = NULL;
-    nuevoNodo->ante = NULL;
+nodo2* CrearNuevoNodoDoble (stClub datos)
+{
+    nodo2* nuevoNodoD=(nodo2*)malloc(sizeof(nodo2));
+    nuevoNodoD->datos=datos;
+    nuevoNodoD->sig=NULL;
+    nuevoNodoD->ante=NULL;
 
-    if (cabeza == NULL) {
-        return nuevoNodo;
-    } else {
+    return nuevoNodoD;
+}
+/// Función para agregar un socio ordenado por nombre a la lista secundaria a una Lista Doble
+nodo2* agregarSocioOrdenado(nodo2* cabeza, stClub datos)
+{
+    nodo2* nuevoNodo = CrearNuevoNodoDoble(datos);
+
+    if (cabeza == NULL)
+    {
+        cabeza= nuevoNodo;
+    }
+    else
+    {
         nodo2* actual = cabeza;
         nodo2* previo = NULL;
-        while (actual != NULL && strcmp(actual->datos.nya, datos.nya) < 0) {
+        while (actual != NULL && strcmp(actual->datos.nya, datos.nya) < 0)
+        {
             previo = actual;
             actual = actual->sig;
         }
         nuevoNodo->sig = actual;
         nuevoNodo->ante = previo;
-        if (previo == NULL) {
+        if (previo == NULL)
+        {
             cabeza = nuevoNodo;
-        } else {
+        }
+        else
+        {
             previo->sig = nuevoNodo;
         }
-        if (actual != NULL) {
+        if (actual != NULL)
+        {
             actual->ante = nuevoNodo;
         }
     }
     return cabeza;
 }
-// Función para imprimir la lista secundaria de socios
-void imprimirSocios(nodo2* lista) {
+/// Función para imprimir la lista secundaria de socios
+void imprimirSocios(nodo2* lista)
+{
     nodo2* actual = lista;
-    while (actual != NULL) {
+    while (actual != NULL)
+    {
         printf("ID Socio: %d, Nombre: %s, Edad: %d, Ultima Cuota Paga: %d, Valor Cuota: %.2f\n",
                actual->datos.idSocio, actual->datos.nya, actual->datos.edad,
                actual->datos.UltimaCuotaPaga, actual->datos.valorCuota);
@@ -79,20 +98,24 @@ void imprimirSocios(nodo2* lista) {
     }
 }
 
-// Función para imprimir la lista principal de deportes y sus socios
-void imprimirDeportesYSocios(nodo* lista) {
+/// Función para imprimir la lista principal de deportes y sus socios
+void imprimirDeportesYSocios(nodo* lista)
+{
     nodo* actual = lista;
-    while (actual != NULL) {
+    while (actual != NULL)
+    {
         printf("Deporte: %s\n", actual->datos.NombreDeporte);
         imprimirSocios(actual->listaDeLista);
         actual = actual->sig;
     }
 }
 
-// Función para buscar un deporte en la lista principal
-nodo* buscarDeporte(nodo* cabeza, const char* nombreDeporte) {
+/// Función para buscar un deporte en la lista principal
+nodo* buscarDeporte(nodo* cabeza, const char* nombreDeporte)
+{
     nodo* actual = cabeza;
-    while (actual != NULL && strcmp(actual->datos.NombreDeporte, nombreDeporte) != 0) {
+    while (actual != NULL && strcmp(actual->datos.NombreDeporte, nombreDeporte) != 0)
+    {
         actual = actual->sig;
     }
     return actual;
@@ -101,8 +124,9 @@ nodo* buscarDeporte(nodo* cabeza, const char* nombreDeporte) {
 
 
 
-// Función para ingresar los datos de un nuevo socio manualmente
-stClub ingresarDatosSocio() {
+/// Función para ingresar los datos de un nuevo socio manualmente
+stClub ingresarDatosSocio()
+{
     stClub nuevoSocio;
     printf("Ingrese ID de socio: ");
     scanf("%d", &nuevoSocio.idSocio);
@@ -117,7 +141,10 @@ stClub ingresarDatosSocio() {
 
     return nuevoSocio;
 }
-stDeporte ingresarDatosDeporte() {
+
+///Ingresar deporte epor teclado
+stDeporte ingresarDatosDeporte()
+{
     stDeporte nuevoDeporte;
     printf("Ingrese ID del deporte: ");
     scanf("%d", &nuevoDeporte.idDeporte);
@@ -127,53 +154,45 @@ stDeporte ingresarDatosDeporte() {
 }
 
 // Función para agregar un nuevo socio a un deporte específico
-void altaManualSocio(nodo* listaDeportes) {
+void altaManualSocio(nodo* listaDeportes)
+{
     int idDeporte;
     printf("Ingrese ID del deporte donde desea agregar el socio: ");
     scanf("%d", &idDeporte);
 
     nodo* deporte = buscarDeportePorId(listaDeportes, idDeporte);
-    if (deporte == NULL) {
-        printf("Deporte no encontrado para ID: %d\n", idDeporte);
-        return;
+    if (deporte != NULL)
+    {
+        stClub nuevoSocio = ingresarDatosSocio();
+        // Agregar el socio a la lista de socios del deporte encontrado
+        deporte->listaDeLista = agregarSocioOrdenado(deporte->listaDeLista, nuevoSocio);
+
+        printf("Socio agregado correctamente al deporte ID %d.\n", idDeporte);
     }
-
-    stClub nuevoSocio = ingresarDatosSocio();
-
-    // Buscar el deporte correspondiente en la lista de deportes
-    nodo* deporteEncontrado = buscarDeportePorId(listaDeportes, idDeporte);
-    if (deporteEncontrado == NULL) {
+    else
+    {
         printf("Deporte no encontrado para ID: %d\n", idDeporte);
-        return;
     }
-
-    // Agregar el socio a la lista de socios del deporte encontrado
-    deporte->listaDeLista = agregarSocioOrdenado(deporte->listaDeLista, nuevoSocio);
-
-    printf("Socio agregado correctamente al deporte ID %d.\n", idDeporte);
 }
 
 // Función para agregar una nueva disciplina deportiva
-void altaManualDeporte(nodo** listaDeportes) {
+void altaManualDeporte(nodo** listaDeportes)
+{
     stDeporte nuevoDeporte = ingresarDatosDeporte();
 
     // Crear un nuevo nodo para el deporte
-    nodo* nuevoNodo = (nodo*)malloc(sizeof(nodo));
-    if (nuevoNodo == NULL) {
-        fprintf(stderr, "Error: no se pudo asignar memoria para el nuevo nodo\n");
-        return;
-    }
-
-    nuevoNodo->datos = nuevoDeporte;
-    nuevoNodo->sig = NULL;
-    nuevoNodo->listaDeLista = NULL;
+    nodo* nuevoNodo =CrearNuevoNodo(nuevoDeporte);
 
     // Agregar el nuevo nodo al final de la lista principal de deportes
-    if (*listaDeportes == NULL) {
+    if (*listaDeportes == NULL)
+    {
         *listaDeportes = nuevoNodo;
-    } else {
+    }
+    else
+    {
         nodo* actual = *listaDeportes;
-        while (actual->sig != NULL) {
+        while (actual->sig != NULL)
+        {
             actual = actual->sig;
         }
         actual->sig = nuevoNodo;
@@ -181,48 +200,60 @@ void altaManualDeporte(nodo** listaDeportes) {
 
     printf("Deporte agregado correctamente.\n");
 }
-// Función para agregar un nuevo socio a ambas listas
-void agregarNuevoSocio(nodo* lista, const char* nombreDeporte, stClub datos) {
+/// Función para agregar un nuevo socio a ambas listas
+void agregarNuevoSocio(nodo* lista, const char* nombreDeporte, stClub datos)
+{
     nodo* deporte = buscarDeporte(lista, nombreDeporte);
-    if (deporte != NULL) {
+    if (deporte != NULL)
+    {
         deporte->listaDeLista = agregarSocioOrdenado(deporte->listaDeLista, datos);
-    } else {
+    }
+    else
+    {
         printf("Deporte no encontrado.\n");
     }
 }
-// Función para buscar un deporte por ID en la lista principal
-nodo* buscarDeportePorId(nodo* cabeza, int idDeporte) {
+/// Función para buscar un deporte por ID en la lista principal
+nodo* buscarDeportePorId(nodo* cabeza, int idDeporte)
+{
     nodo* actual = cabeza;
-    while (actual != NULL && actual->datos.idDeporte != idDeporte) {
+    while (actual != NULL && actual->datos.idDeporte != idDeporte)
+    {
         actual = actual->sig;
     }
     return actual;
 }
 
 
-// Función para listar todas las disciplinas deportivas y los socios que las practican
-void listarDisciplinasYSocios(nodo* listaDeportes) {
+/// Función para listar todas las disciplinas deportivas y los socios que las practican
+void listarDisciplinasYSocios(nodo* listaDeportes)
+{
     nodo* actual = listaDeportes;
-    while (actual != NULL) {
+    while (actual != NULL)
+    {
         printf("Deporte: %s\n", actual->datos.NombreDeporte);
         imprimirSocios(actual->listaDeLista);
         actual = actual->sig;
     }
 }
 
-// Función para encontrar el deporte con más socios
-char* deporteConMasSocios(nodo* lista) {
+/// Función para encontrar el deporte con más socios, recorro la lista y cuento con un acumulador cada socio y comparo
+char* deporteConMasSocios(nodo* lista)
+{
     nodo* actual = lista;
     int maxCount = 0;
     char* deporteMax = NULL;
-    while (actual != NULL) {
+    while (actual != NULL)
+    {
         int count = 0;
         nodo2* socio = actual->listaDeLista;
-        while (socio != NULL) {
+        while (socio != NULL)
+        {
             count++;
             socio = socio->sig;
         }
-        if (count > maxCount) {
+        if (count > maxCount)
+        {
             maxCount = count;
             deporteMax = actual->datos.NombreDeporte;
         }
@@ -231,51 +262,65 @@ char* deporteConMasSocios(nodo* lista) {
     return deporteMax;
 }
 // Función para listar socios del deporte con más socios
-void listarSociosDeporteConMasSocios(nodo* lista) {
+void listarSociosDeporteConMasSocios(nodo* lista)
+{
     char* deporteMax = deporteConMasSocios(lista);
-    if (deporteMax != NULL) {
+    if (deporteMax != NULL)
+    {
         printf("Deporte con más socios: %s\n", deporteMax);
         nodo* actual = lista;
-        while (actual != NULL) {
-            if (strcmp(actual->datos.NombreDeporte, deporteMax) == 0) {
+        while (actual != NULL)
+        {
+            if (strcmp(actual->datos.NombreDeporte, deporteMax) == 0)
+            {
                 imprimirSocios(actual->listaDeLista);
-                break;
             }
             actual = actual->sig;
         }
-    } else {
+    }
+    else
+    {
         printf("No hay deportes registrados.\n");
     }
 }
 
 // Función para escribir los datos de los socios a un archivo binario
-void escribirDatosSocios(const char* nombreArchivo, nodo* lista) {
+void escribirDatosSocios(const char* nombreArchivo, nodo* lista)
+{
     FILE* archivo = fopen(nombreArchivo, "wb");
-    if (archivo == NULL) {
-        perror("No se pudo abrir el archivo para escribir");
-        return;
-    }
-    nodo* actual = lista;
-    while (actual != NULL) {
-        nodo2* actualSocio = actual->listaDeLista;
-        while (actualSocio != NULL) {
-            fwrite(&(actualSocio->datos), sizeof(stClub), 1, archivo);
-            actualSocio = actualSocio->sig;
+    if (archivo != NULL)
+    {
+        nodo* actual = lista;
+        while (actual != NULL)
+        {
+            nodo2* actualSocio = actual->listaDeLista;
+            while (actualSocio != NULL)
+            {
+                fwrite(&(actualSocio->datos), sizeof(stClub), 1, archivo);
+                actualSocio = actualSocio->sig;
+            }
+            actual = actual->sig;
         }
-        actual = actual->sig;
+        fclose(archivo);
     }
-    fclose(archivo);
+    else
+    {
+        perror("No se pudo abrir el archivo para escribir");
+    }
 }
 
 // Función para escribir los datos de los deportes a un archivo binario
-void escribirDatosDeportes(const char* nombreArchivo, nodo* lista) {
+void escribirDatosDeportes(const char* nombreArchivo, nodo* lista)
+{
     FILE* archivo = fopen(nombreArchivo, "wb");
-    if (archivo == NULL) {
+    if (archivo == NULL)
+    {
         perror("No se pudo abrir el archivo para escribir");
         return;
     }
     nodo* actual = lista;
-    while (actual != NULL) {
+    while (actual != NULL)
+    {
         fwrite(&(actual->datos), sizeof(stDeporte), 1, archivo);
         actual = actual->sig;
     }
@@ -284,105 +329,135 @@ void escribirDatosDeportes(const char* nombreArchivo, nodo* lista) {
 
 
 // Función para leer los datos de los socios desde un archivo binario
-void leerDatosSocios(const char* nombreArchivo, nodo* listaDeportes) {
+nodo* leerDatosSocios(const char* nombreArchivo, nodo* listaDeportes)
+{
     FILE* archivo = fopen(nombreArchivo, "rb");
-    if (archivo == NULL) {
-        perror("No se pudo abrir el archivo para leer");
-        return;
-    }
+    nodo* listaActualizada = listaDeportes;
 
-    stClub datos;
-    stDeporte datosdep;
-    while (fread(&datos, sizeof(stClub), 1, archivo)) {
-        nodo* deporte = buscarDeportePorId(listaDeportes, datosdep.idDeporte);
-        if (deporte != NULL) {
-            deporte->listaDeLista = agregarSocioOrdenado(deporte->listaDeLista, datos);
-        } else {
-            printf("Deporte no encontrado para ID: %d\n", datosdep.idDeporte);
+    if (archivo != NULL)
+    {
+        stClub datos;
+        while (fread(&datos, sizeof(stClub), 1, archivo))
+        {
+            nodo* deporte = buscarDeportePorId(listaDeportes, datos.idDeporte);
+            if (deporte != NULL)
+            {
+                deporte->listaDeLista = agregarSocioOrdenado(deporte->listaDeLista, datos);
+            }
+            else
+            {
+                printf("Deporte no encontrado para ID: %d\n", datos.idDeporte);
+            }
         }
+
+        fclose(archivo);
+    }
+    else
+    {
+        perror("No se pudo abrir el archivo para leer");
     }
 
-    fclose(archivo);
+    return listaActualizada;
 }
+
 
 
 
 
 // Función para leer los datos de los deportes desde un archivo binario
-nodo* leerDatosDeportes(const char* nombreArchivo) {
+nodo* leerDatosDeportes(const char* nombreArchivo)
+{
+    nodo* listaDeportes = NULL;
     FILE* archivo = fopen(nombreArchivo, "rb");
-    if (archivo == NULL) {
+
+    if (archivo != NULL)
+    {
+        listaDeportes = inicializarLista();
+        stDeporte datos;
+
+        while (fread(&datos, sizeof(stDeporte), 1, archivo))
+        {
+            listaDeportes = agregarDeporte(listaDeportes, datos);
+        }
+
+        fclose(archivo);
+    }
+    else
+    {
         perror("No se pudo abrir el archivo para leer");
-        return NULL;
     }
 
-    nodo* listaDeportes = inicializarLista();
-    stDeporte datos;
-
-    while (fread(&datos, sizeof(stDeporte), 1, archivo)) {
-        listaDeportes = agregarDeporte(listaDeportes, datos);
-    }
-
-    fclose(archivo);
     return listaDeportes;
 }
 
 
+
 // Función para buscar socios que adeuden cuotas
-stClub* buscarSociosConDeuda(nodo* listaDeportes, const char* nombreDeporte, int mes, int* numSocios) {
+stClub* buscarSociosConDeuda(nodo* listaDeportes, const char* nombreDeporte, int mes, int* numSocios)
+{
     *numSocios = 0;
+    stClub* arregloSocios = NULL;
     nodo* actualDeporte = listaDeportes;
 
     // Buscar el deporte en la lista principal
-    while (actualDeporte != NULL && strcmp(actualDeporte->datos.NombreDeporte, nombreDeporte) != 0) {
+    while (actualDeporte != NULL && strcmp(actualDeporte->datos.NombreDeporte, nombreDeporte) != 0)
+    {
         actualDeporte = actualDeporte->sig;
     }
 
-    if (actualDeporte == NULL) {
+    if (actualDeporte == NULL)
+    {
         // No se encontró el deporte
         printf("Deporte no encontrado.\n");
-        return NULL;
     }
-
-    // Contar los socios que adeudan cuotas
-    nodo2* actualSocio = actualDeporte->listaDeLista;
-    while (actualSocio != NULL) {
-        if (actualSocio->datos.UltimaCuotaPaga < mes) {
-            (*numSocios)++;
+    else
+    {
+        // Contar los socios que adeudan cuotas
+        nodo2* actualSocio = actualDeporte->listaDeLista;
+        while (actualSocio != NULL)
+        {
+            if (actualSocio->datos.UltimaCuotaPaga < mes)
+            {
+                (*numSocios)++;
+            }
+            actualSocio = actualSocio->sig;
         }
-        actualSocio = actualSocio->sig;
-    }
 
-    if (*numSocios == 0) {
-        // No hay socios que adeudan cuotas
-        printf("No hay socios que adeuden cuotas para el deporte %s.\n", nombreDeporte);
-        return NULL;
-    }
-
-    // Crear el arreglo de socios que adeudan cuotas
-    stClub* arregloSocios = (stClub*)malloc((*numSocios) * sizeof(stClub));
-    if (arregloSocios == NULL) {
-        fprintf(stderr, "Error: no se pudo asignar memoria para el arreglo de socios\n");
-        return NULL;
-    }
-
-    // Copiar los socios que adeudan cuotas al arreglo
-    int indice = 0;
-    actualSocio = actualDeporte->listaDeLista;
-    while (actualSocio != NULL) {
-        if (actualSocio->datos.UltimaCuotaPaga < mes) {
-            arregloSocios[indice] = actualSocio->datos;
-            indice++;
+        if (*numSocios == 0)
+        {
+            // No hay socios que adeudan cuotas
+            printf("No hay socios que adeuden cuotas para el deporte %s.\n", nombreDeporte);
         }
-        actualSocio = actualSocio->sig;
+        else
+        {
+            // Crear el arreglo de socios que adeudan cuotas
+            arregloSocios = (stClub*)malloc((*numSocios) * sizeof(stClub));
+
+                // Copiar los socios que adeudan cuotas al arreglo
+                int indice = 0;
+                actualSocio = actualDeporte->listaDeLista;
+                while (actualSocio != NULL)
+                {
+                    if (actualSocio->datos.UltimaCuotaPaga < mes)
+                    {
+                        arregloSocios[indice] = actualSocio->datos;
+                        indice++;
+                    }
+                    actualSocio = actualSocio->sig;
+                }
+
+        }
     }
 
     return arregloSocios;
 }
+
 // Función para liberar la memoria ocupada por la lista principal
-void liberarListaPrincipal(nodo* cabeza) {
+void liberarListaPrincipal(nodo* cabeza)
+{
     nodo* actual = cabeza;
-    while (actual != NULL) {
+    while (actual != NULL)
+    {
         nodo* siguiente = actual->sig;
         free(actual);
         actual = siguiente;
@@ -390,9 +465,11 @@ void liberarListaPrincipal(nodo* cabeza) {
 }
 
 // Función para liberar la memoria ocupada por la lista secundaria
-void liberarListaSecundaria(nodo2* cabeza) {
+void liberarListaSecundaria(nodo2* cabeza)
+{
     nodo2* actual = cabeza;
-    while (actual != NULL) {
+    while (actual != NULL)
+    {
         nodo2* siguiente = actual->sig;
         free(actual);
         actual = siguiente;

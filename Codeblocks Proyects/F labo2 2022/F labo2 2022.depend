@@ -13,3 +13,17 @@
 
 1720459006 c:\users\ivanb\codeblocks proyects\f labo2 2022\prot.h
 
+1720619966 source:c:\users\ivanb\codeblocks proyects\lab2\codeblocks proyects\f labo2 2022\lib.c
+	<stdio.h>
+	<stdlib.h>
+	"prot.h"
+	<string.h>
+
+1720622536 c:\users\ivanb\codeblocks proyects\lab2\codeblocks proyects\f labo2 2022\prot.h
+
+1720619480 source:c:\users\ivanb\codeblocks proyects\lab2\codeblocks proyects\f labo2 2022\main.c
+	<stdio.h>
+	<stdlib.h>
+	"prot.h"
+	<string.h>
+
